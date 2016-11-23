@@ -8,7 +8,7 @@
 
 @class ZYLaunchAd;
 
-//声明几个block
+//声明block
 typedef void(^clickBlock)();
 typedef void(^setAdImageBlock)(ZYLaunchAd *launchAd);
 typedef void(^showFinishBlock)();

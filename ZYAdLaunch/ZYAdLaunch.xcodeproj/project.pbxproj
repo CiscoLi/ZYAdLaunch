@@ -17,6 +17,7 @@
 		0C2BCA901DE560C800C47DC5 /* ZYAdLaunchUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2BCA8F1DE560C800C47DC5 /* ZYAdLaunchUITests.m */; };
 		0C2BCA9F1DE5645500C47DC5 /* ZYLaunchAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2BCA9E1DE5645500C47DC5 /* ZYLaunchAd.m */; };
 		0C71E9081DE56E8A003655A2 /* ZYSkipButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C71E9071DE56E8A003655A2 /* ZYSkipButton.m */; };
+		0C71E90B1DE595E1003655A2 /* ZYWebImageDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C71E90A1DE595E1003655A2 /* ZYWebImageDownload.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,8 @@
 		0C2BCA9E1DE5645500C47DC5 /* ZYLaunchAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYLaunchAd.m; sourceTree = "<group>"; };
 		0C71E9061DE56E8A003655A2 /* ZYSkipButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYSkipButton.h; sourceTree = "<group>"; };
 		0C71E9071DE56E8A003655A2 /* ZYSkipButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYSkipButton.m; sourceTree = "<group>"; };
+		0C71E9091DE595E1003655A2 /* ZYWebImageDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYWebImageDownload.h; sourceTree = "<group>"; };
+		0C71E90A1DE595E1003655A2 /* ZYWebImageDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYWebImageDownload.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +118,8 @@
 				0C2BCA9E1DE5645500C47DC5 /* ZYLaunchAd.m */,
 				0C71E9061DE56E8A003655A2 /* ZYSkipButton.h */,
 				0C71E9071DE56E8A003655A2 /* ZYSkipButton.m */,
+				0C71E9091DE595E1003655A2 /* ZYWebImageDownload.h */,
+				0C71E90A1DE595E1003655A2 /* ZYWebImageDownload.m */,
 				0C2BCA731DE560C800C47DC5 /* Main.storyboard */,
 				0C2BCA761DE560C800C47DC5 /* Assets.xcassets */,
 				0C2BCA781DE560C800C47DC5 /* LaunchScreen.storyboard */,
@@ -290,6 +295,7 @@
 				0C2BCA721DE560C800C47DC5 /* ViewController.m in Sources */,
 				0C2BCA6F1DE560C800C47DC5 /* AppDelegate.m in Sources */,
 				0C2BCA9F1DE5645500C47DC5 /* ZYLaunchAd.m in Sources */,
+				0C71E90B1DE595E1003655A2 /* ZYWebImageDownload.m in Sources */,
 				0C2BCA6C1DE560C800C47DC5 /* main.m in Sources */,
 				0C71E9081DE56E8A003655A2 /* ZYSkipButton.m in Sources */,
 			);
