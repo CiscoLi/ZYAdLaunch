@@ -49,4 +49,38 @@
     }
 }
 
+- (void)setLeftRightSpace:(CGFloat)leftRightSpace
+{
+    _leftRightSpace = leftRightSpace;
+    CGRect frame = self.timeLabel.frame;
+    CGFloat width = frame.size.width;
+    if (leftRightSpace <= 0 || leftRightSpace * 2 >= width) return;
+    frame = CGRectMake(leftRightSpace, 0, width - 2 * leftRightSpace, frame.size.height);
+    self.timeLabel.frame = frame;
+    [self timeLabcornerRadiusWithFrame:frame];
+}
+
+-(void)setTopBottomSpace:(CGFloat)topBottomSpace
+{
+    _topBottomSpace = topBottomSpace;
+    CGRect frame = self.timeLabel.frame;
+    CGFloat height = frame.size.height;
+    if(topBottomSpace<=0 || topBottomSpace*2>= height) return;
+    frame = CGRectMake(0, topBottomSpace, frame.size.width, height-2*topBottomSpace);
+    self.timeLabel.frame = frame;
+    [self timeLabcornerRadiusWithFrame:frame];
+    
+}
+
+-(void)timeLabcornerRadiusWithFrame:(CGRect)frame
+{
+    CGFloat min = frame.size.height;
+    if(frame.size.height>frame.size.width)
+    {
+        min = frame.size.width;
+    }
+    self.timeLabel.layer.cornerRadius = min/2.0;
+    self.timeLabel.layer.masksToBounds = YES;
+}
+
 @end
