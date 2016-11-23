@@ -15,6 +15,8 @@
 		0C2BCA7A1DE560C800C47DC5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C2BCA781DE560C800C47DC5 /* LaunchScreen.storyboard */; };
 		0C2BCA851DE560C800C47DC5 /* ZYAdLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2BCA841DE560C800C47DC5 /* ZYAdLaunchTests.m */; };
 		0C2BCA901DE560C800C47DC5 /* ZYAdLaunchUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2BCA8F1DE560C800C47DC5 /* ZYAdLaunchUITests.m */; };
+		0C2BCA9F1DE5645500C47DC5 /* ZYLaunchAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2BCA9E1DE5645500C47DC5 /* ZYLaunchAd.m */; };
+		0C71E9081DE56E8A003655A2 /* ZYSkipButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C71E9071DE56E8A003655A2 /* ZYSkipButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,10 @@
 		0C2BCA8B1DE560C800C47DC5 /* ZYAdLaunchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZYAdLaunchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C2BCA8F1DE560C800C47DC5 /* ZYAdLaunchUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZYAdLaunchUITests.m; sourceTree = "<group>"; };
 		0C2BCA911DE560C800C47DC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0C2BCA9D1DE5645500C47DC5 /* ZYLaunchAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYLaunchAd.h; sourceTree = "<group>"; };
+		0C2BCA9E1DE5645500C47DC5 /* ZYLaunchAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYLaunchAd.m; sourceTree = "<group>"; };
+		0C71E9061DE56E8A003655A2 /* ZYSkipButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYSkipButton.h; sourceTree = "<group>"; };
+		0C71E9071DE56E8A003655A2 /* ZYSkipButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYSkipButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +111,10 @@
 				0C2BCA6E1DE560C800C47DC5 /* AppDelegate.m */,
 				0C2BCA701DE560C800C47DC5 /* ViewController.h */,
 				0C2BCA711DE560C800C47DC5 /* ViewController.m */,
+				0C2BCA9D1DE5645500C47DC5 /* ZYLaunchAd.h */,
+				0C2BCA9E1DE5645500C47DC5 /* ZYLaunchAd.m */,
+				0C71E9061DE56E8A003655A2 /* ZYSkipButton.h */,
+				0C71E9071DE56E8A003655A2 /* ZYSkipButton.m */,
 				0C2BCA731DE560C800C47DC5 /* Main.storyboard */,
 				0C2BCA761DE560C800C47DC5 /* Assets.xcassets */,
 				0C2BCA781DE560C800C47DC5 /* LaunchScreen.storyboard */,
@@ -202,6 +212,7 @@
 		0C2BCA5F1DE560C800C47DC5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = ZY;
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = zhaoyang;
 				TargetAttributes = {
@@ -278,7 +289,9 @@
 			files = (
 				0C2BCA721DE560C800C47DC5 /* ViewController.m in Sources */,
 				0C2BCA6F1DE560C800C47DC5 /* AppDelegate.m in Sources */,
+				0C2BCA9F1DE5645500C47DC5 /* ZYLaunchAd.m in Sources */,
 				0C2BCA6C1DE560C800C47DC5 /* main.m in Sources */,
+				0C71E9081DE56E8A003655A2 /* ZYSkipButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +442,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = C73Q85RKN6;
 				INFOPLIST_FILE = ZYAdLaunch/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhaoyang.www.ZYAdLaunch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -441,6 +455,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = C73Q85RKN6;
 				INFOPLIST_FILE = ZYAdLaunch/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhaoyang.www.ZYAdLaunch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -516,6 +531,7 @@
 				0C2BCA961DE560C800C47DC5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0C2BCA971DE560C800C47DC5 /* Build configuration list for PBXNativeTarget "ZYAdLaunchTests" */ = {
 			isa = XCConfigurationList;
@@ -524,6 +540,7 @@
 				0C2BCA991DE560C800C47DC5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0C2BCA9A1DE560C800C47DC5 /* Build configuration list for PBXNativeTarget "ZYAdLaunchUITests" */ = {
 			isa = XCConfigurationList;
@@ -532,6 +549,7 @@
 				0C2BCA9C1DE560C800C47DC5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
