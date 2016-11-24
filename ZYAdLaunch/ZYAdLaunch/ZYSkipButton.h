@@ -25,7 +25,13 @@ typedef NS_ENUM(NSInteger,SkipType) {
 
 @property (nonatomic,assign) CGFloat topBottomSpace;
 
-// 设置skipButton 状态
+
+/**
+ 设置skipButton状态
+
+ @param skipType        状态枚举
+ @param duration        持续时间
+ */
 - (void)zy_stateWithSkipType:(SkipType)skipType andDuration:(NSInteger)duration;
 
 @end

@@ -43,9 +43,9 @@ typedef void(^ZYWebImageCompletionBlock)(UIImage *image,NSURL *url);
 /**
  异步下载图片
 
- @param url 图片url
- @param options 缓存机制选项
- @param completedBlock 下载完成回调
+ @param url                     图片url
+ @param options                 缓存机制选项
+ @param completedBlock          下载完成回调
  */
 + (void)zy_downLoadImage_asyncWithUrl:(NSURL *)url options:(ZYWebImageOptions)options completed:(ZYWebImageCompletionBlock)completedBlock;
 

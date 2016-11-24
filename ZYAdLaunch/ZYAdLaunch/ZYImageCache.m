@@ -16,8 +16,8 @@
 /**
  获取缓存图片
 
- @param url 路径
- @return 缓存图片
+ @param url                 路径
+ @return                    缓存图片
  */
 + (UIImage *)zy_getCacheImageWithUrl:(NSURL *)url
 {
@@ -33,8 +33,8 @@
 /**
  缓存图片
 
- @param data imageDta
- @param url 图片Url
+ @param data                imageDta
+ @param url                 图片Url
  */
 + (void)zy_saveImageData:(NSData *)data imageUrl:(NSURL *)url
 {
@@ -49,7 +49,7 @@
 /**
  获取缓存路径
 
- @return 缓存路径
+ @return                    缓存路径
  */
 + (NSString *)zy_cacheImagePath
 {
@@ -62,7 +62,7 @@
 /**
  检查目录
 
- @param path 需要被检查的路径
+ @param path                需要被检查的路径
  */
 + (void)zy_checkDirectory:(NSString *)path
 {
@@ -85,7 +85,7 @@
 /**
  创建目录
 
- @param path 路径
+ @param path                路径
  */
 + (void)zy_createBaseDirectoryAtPath:(NSString *)path
 {
@@ -103,7 +103,7 @@
 /**
  防止备份到iCloud和iTunes
 
- @param path 路径
+ @param path                路径
  */
 + (void)zy_addDoNotBackupAttribute:(NSString *)path
 {

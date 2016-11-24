@@ -14,8 +14,8 @@
 /**
  data转成image
 
- @param data data数据
- @return 图片
+ @param data            data数据
+ @return                图片
  */
 + (UIImage *)zy_animatedGIFWithData:(NSData *)data;
 

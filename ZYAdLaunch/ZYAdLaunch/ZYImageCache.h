@@ -15,8 +15,8 @@
 /**
  获取缓存照片
 
- @param url 图片url
- @return 图片
+ @param url             图片url
+ @return                图片
  */
 + (UIImage *)zy_getCacheImageWithUrl:(NSURL *)url;
 
@@ -24,8 +24,8 @@
 /**
  缓存图片
 
- @param data imageData
- @param url 图片Url
+ @param data            imageData
+ @param url             图片Url
  */
 + (void)zy_saveImageData:(NSData *)data imageUrl:(NSURL *)url;
 
@@ -33,7 +33,7 @@
 /**
  获取缓存路径
 
- @return path
+ @return                path
  */
 + (NSString *)zy_cacheImagePath;
 
@@ -41,7 +41,7 @@
 /**
  check路径
 
- @param path 路径
+ @param path            路径
  */
 + (void)zy_checkDirectory:(NSString *)path;
 
