@@ -8,9 +8,17 @@
 
 #import "ZYImageCache.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "UIImage+ZYGIF.h"
 
 @implementation ZYImageCache
 
+
+/**
+ 获取缓存图片
+
+ @param url 路径
+ @return 缓存图片
+ */
 + (UIImage *)zy_getCacheImageWithUrl:(NSURL *)url
 {
     if (url == nil) return nil;
@@ -18,7 +26,7 @@
     NSString *path = [NSString stringWithFormat:@"%@%@",[self zy_cacheImagePath],[self zy_md5String:url.absoluteString]];
     NSData *data = [NSData dataWithContentsOfFile:path];
     
-    return nil;
+    return [UIImage zy_animatedGIFWithData:data];
 }
 
 
