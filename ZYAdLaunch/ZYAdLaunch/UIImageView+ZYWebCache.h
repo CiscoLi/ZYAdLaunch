@@ -12,14 +12,12 @@
 
 @interface UIImageView (ZYWebCache)
 
-
 /**
  异步加载网络图片带本地缓存
 
  @param url 图片Url
  */
 - (void)zy_setImageWithUrl:(NSURL *)url;
-
 
 /**
  异步加载网络图片带本地缓存,同时可以设置占位图
@@ -29,7 +27,6 @@
  */
 - (void)zy_setImageWithUrl:(NSURL *)url placeholderImage:(UIImage *)placeholder;
 
-
 /**
  异步加载网络图片带本地缓存,加载完成后回调
 
@@ -38,7 +35,6 @@
  @param completedBlock 完成后回调
  */
 - (void)zy_setImageWithUrl:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(ZYWebImageCompletionBlock)completedBlock;
-
 
 /**
  异步加载网络图片带本地缓存,支持选择缓存机制,和完成回调
