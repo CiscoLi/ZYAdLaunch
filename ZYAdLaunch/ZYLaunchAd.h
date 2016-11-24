@@ -22,6 +22,15 @@ typedef void(^showFinishBlock)();
 
 
 /**
+ 没有广告数据.启动页面停留时间默认三秒,最小一秒
+ !!!!!----请在向服务器请求广告数据前,设置此属性-----!!!!!
+ */
+@property (nonatomic,assign) NSInteger noDataDuration;
+
+@property (nonatomic,assign) CGRect adFrame;
+
+
+/**
  显示自定义启动图
 
  @param frame           广告frame
