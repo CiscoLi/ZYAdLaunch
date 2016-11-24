@@ -28,6 +28,10 @@ static NSInteger const noDataDefaultDuration = 3;
 
 @property(nonatomic,copy) dispatch_source_t skipButtonTimer;                        //跳转按钮倒计时
 
+@property(nonatomic,assign) NSInteger duration;                                     //持续时间
+
+@property(nonatomic,assign) BOOL isClick;                                           //是否点击
+
 @end
 
 @implementation ZYLaunchAd
@@ -39,9 +43,9 @@ static NSInteger const noDataDefaultDuration = 3;
 /**
  初始化函数
 
- @param frame 尺寸
- @param showFinish 显示完成的block
- @return 初始完成后self
+ @param frame           尺寸
+ @param showFinish      显示完成的block
+ @return                初始完成后self
  */
 - (instancetype)initWithFrame:(CGRect)frame showFinish:(void(^)())showFinish
 {
@@ -61,11 +65,15 @@ static NSInteger const noDataDefaultDuration = 3;
 /**
  视图即将显示
 
- @param animated 动画属性
+ @param animated        动画属性
  */
 - (void)viewWillAppear:(BOOL)animated
 {
-    
+    if (self.skipButtonTimer && self.duration > 0 && self.isClick) {
+        //dispatch_resume函数恢复指定的Dispatch Queue
+        dispatch_resume(self.skipButtonTimer);
+    }
+    self.isClick = NO;
 }
 // ==============================================================
 #pragma mark - 辅助函数
