@@ -32,6 +32,12 @@ static NSInteger const noDataDefaultDuration = 3;
 
 @property(nonatomic,assign) BOOL isClick;                                           //是否点击
 
+@property(nonatomic,assign) SkipType skipType;                                      //倒计时类型
+
+@property(nonatomic,copy) clickBlock clickBlock;                                    //点击广告block
+
+@property(nonatomic,strong)ZYSkipButton *skipButton;                                //倒计时按钮
+
 @end
 
 @implementation ZYLaunchAd
@@ -64,7 +70,23 @@ static NSInteger const noDataDefaultDuration = 3;
  */
 - (void)setImageUrl:(NSString *)imageUrl duration:(NSInteger)duration skipType:(SkipType)skipType options:(ZYWebImageOptions)options completed:(ZYWebImageCompletionBlock)completedBlock click:(clickBlock)click
 {
+    if(self.isShowFinish) return;
+    if ([self imageUrlError:imageUrl]) return;
     
+    //后台缓存本次不显示,缓存完成以后下次显示
+    if (options&ZYWebImageCacheInBackground)
+    {
+        if (self.noDataTimer) dispatch_source_cancel(self.noDataTimer);
+        [[UIImageView alloc]zy_setImageWithUrl:[NSURL URLWithString:imageUrl] placeholderImage:nil options:options completed:nil];
+        [self remove];
+        return;
+    }
+    
+    self.duration = duration;
+    self.skipType = skipType;
+    self.clickBlock = [click copy];
+    [self setupAdImgViewAndSkipButton];
+    [self.adImgView zy_setImageWithUrl:[NSURL URLWithString:imageUrl] placeholderImage:nil options:options completed:completedBlock];
 }
 
 // ==============================================================
@@ -107,12 +129,25 @@ static NSInteger const noDataDefaultDuration = 3;
     self.isClick = NO;
 }
 
+
+/**
+ 视图即将消失
+
+ @param animated        动画属性
+ */
 - (void)viewDidDisappear:(BOOL)animated
 {
     if (self.skipButtonTimer && self.duration > 0 && self.isClick) {
         //dispatch_suspend函数挂起指定的Dispatch Queue
         dispatch_suspend(self.skipButtonTimer);
     }
+}
+
+- (void)setupAdImgViewAndSkipButton
+{
+    [self.view addSubview:self.adImgView];
+    [self.view addSubview:self.skipButton];
+    [self animateStart];
 }
 // ==============================================================
 #pragma mark - 辅助函数
@@ -140,6 +175,192 @@ static NSInteger const noDataDefaultDuration = 3;
     });
     //dispatch_resume函数恢复指定的Dispatch Queue
     dispatch_resume(self.noDataTimer);
+}
+
+/**
+ 开启跳转倒计时服务
+ */
+-(void)startSkipButtonTimer
+{
+    if(_noDataTimer) dispatch_source_cancel(_noDataTimer);
+    
+    NSTimeInterval period = 1.0;
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    _skipButtonTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    dispatch_source_set_timer(_skipButtonTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
+    
+    dispatch_source_set_event_handler(_skipButtonTimer, ^{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_skipButton zy_stateWithSkipType:_skipType andDuration:_duration];
+            if(_duration==0)
+            {
+                dispatch_source_cancel(_skipButtonTimer);
+                
+                [self remove];
+            }
+            _duration--;
+        });
+    });
+    dispatch_resume(_skipButtonTimer);
+}
+
+
+/**
+ 判断图片url是否合法
+
+ @param imageUrl        图片地址
+ @return                图片地址是否合法
+ */
+- (BOOL)imageUrlError:(NSString *)imageUrl
+{
+    if (imageUrl == nil || imageUrl.length == 0 || ![imageUrl hasPrefix:@"http"]) {
+        NSLog(@"图片地址有误");
+        return YES;
+    }
+    return NO;
+}
+
+
+/**
+ 开启动画效果
+ */
+- (void)animateStart
+{
+    CGFloat duration = self.duration;
+    duration = duration/4.0;
+    if (duration > 1.0) duration = 1.0;
+    [UIView animateWithDuration:duration animations:^{
+        self.adImgView.alpha = 1;
+    } completion:^(BOOL finished) {
+        
+    }];
+    
+
+}
+
+
+/**
+ 获取Launch图片
+
+ @return Launch图片
+ */
+-(UIImage *)getLaunchImage
+{
+    UIImage *imageP = [self launchImageWithType:@"Portrait"];
+    if(imageP) return imageP;
+    UIImage *imageL = [self launchImageWithType:@"Landscape"];
+    if(imageL) return imageL;
+    NSLog(@"获取LaunchImage失败!请检查是否添加启动图,或者规格是否有误.");
+    return nil;
+}
+
+
+/**
+ 获取Launch图片
+
+ @param type 图片类型
+ @return Launch图片
+ */
+-(UIImage *)launchImageWithType:(NSString *)type
+{
+    CGSize viewSize = [UIScreen mainScreen].bounds.size;
+    NSString *viewOrientation = type;
+    NSString *launchImageName = nil;
+    NSArray* imagesDict = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"UILaunchImages"];
+    for (NSDictionary* dict in imagesDict)
+    {
+        CGSize imageSize = CGSizeFromString(dict[@"UILaunchImageSize"]);
+        
+        if([viewOrientation isEqualToString:dict[@"UILaunchImageOrientation"]])
+        {
+            if([dict[@"UILaunchImageOrientation"] isEqualToString:@"Landscape"])
+            {
+                imageSize = CGSizeMake(imageSize.height, imageSize.width);
+            }
+            if(CGSizeEqualToSize(imageSize, viewSize))
+            {
+                launchImageName = dict[@"UILaunchImageName"];
+                UIImage *image = [UIImage imageNamed:launchImageName];
+                return image;
+            }
+        }
+    }
+    return nil;
+}
+
+// ==============================================================
+#pragma mark - 懒加载函数
+// ==============================================================
+
+- (UIImageView *)launchImgView
+{
+    if (_launchImgView == nil) {
+        _launchImgView = [[UIImageView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        _launchImgView.image = [self getLaunchImage];
+        
+    }
+    return _launchImgView;
+}
+
+- (UIImageView *)adImgView
+{
+    if (_adImgView == nil) {
+        _adImgView = [[UIImageView alloc]initWithFrame:_adFrame];
+        _adImgView.userInteractionEnabled = YES;
+        _adImgView.alpha = 0.2;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction:)];
+        [_adImgView addGestureRecognizer:tap];
+    }
+    return _adImgView;
+}
+
+-(ZYSkipButton *)skipButton
+{
+    if(_skipButton == nil)
+    {
+        _skipButton = [[ZYSkipButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-70,25, 70, 40)];
+        [_skipButton addTarget:self action:@selector(skipAction) forControlEvents:UIControlEventTouchUpInside];
+        _skipButton.leftRightSpace = 5;
+        _skipButton.topBottomSpace = 5;
+        if(!_duration||_duration<=0) _duration = 5;//停留时间传nil或<=0,默认5s
+        if(!_skipType) _skipType = SkipTypeTimeText;//类型传nil,默认TimeText
+        [_skipButton zy_stateWithSkipType:_skipType andDuration:_duration];
+        [self startSkipButtonTimer];
+    }
+    return _skipButton;
+}
+
+// ==============================================================
+#pragma mark - 事件函数
+// ==============================================================
+
+/**
+ 广告图点击事件
+
+ @param tap 点击手势
+ */
+-(void)tapAction:(UITapGestureRecognizer *)tap
+{
+    if(_duration>0)
+    {
+        self.isClick = YES;
+        if(_clickBlock) _clickBlock();
+    }
+}
+
+
+/**
+ 跳过按钮点击事件
+ */
+-(void)skipAction{
+    
+    if(_skipType != SkipTypeTime)
+    {
+        self.isClick = NO;
+        if (_skipButtonTimer) dispatch_source_cancel(_skipButtonTimer);
+        [self remove];
+    }
 }
 
 // ==============================================================
