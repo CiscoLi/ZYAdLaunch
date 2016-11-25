@@ -37,6 +37,37 @@ static NSInteger const noDataDefaultDuration = 3;
 @implementation ZYLaunchAd
 
 // ==============================================================
+#pragma mark - 对外暴露函数
+// ==============================================================
+
+/**
+ 显示自定义启动图
+ 
+ @param frame           广告frame
+ @param setAdImage      设置AdImage回调
+ @param showFinish      广告显示完成回调(在这里进行操作)
+ */
+- (void)showWithAdFrame:(CGRect)frame setAdImage:(setAdImageBlock)setAdImage showFinish:(showFinishBlock)showFinish
+{
+    
+}
+
+/**
+ 数据源方法
+ 
+ @param imageUrl        图片Url
+ @param duration        广告时间(默认5秒,小于0都属于默认)
+ @param skipType        跳过按钮类型
+ @param options         图片的缓存机制
+ @param completedBlock  加载完图片回调
+ @param click           点击了广告回调
+ */
+- (void)setImageUrl:(NSString *)imageUrl duration:(NSInteger)duration skipType:(SkipType)skipType options:(ZYWebImageOptions)options completed:(ZYWebImageCompletionBlock)completedBlock click:(clickBlock)click
+{
+    
+}
+
+// ==============================================================
 #pragma mark - 私有初始化函数
 // ==============================================================
 
@@ -74,6 +105,14 @@ static NSInteger const noDataDefaultDuration = 3;
         dispatch_resume(self.skipButtonTimer);
     }
     self.isClick = NO;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    if (self.skipButtonTimer && self.duration > 0 && self.isClick) {
+        //dispatch_suspend函数挂起指定的Dispatch Queue
+        dispatch_suspend(self.skipButtonTimer);
+    }
 }
 // ==============================================================
 #pragma mark - 辅助函数
