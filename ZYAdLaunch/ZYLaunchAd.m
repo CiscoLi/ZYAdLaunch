@@ -53,9 +53,11 @@ static NSInteger const noDataDefaultDuration = 3;
  @param setAdImage      设置AdImage回调
  @param showFinish      广告显示完成回调(在这里进行操作)
  */
-- (void)showWithAdFrame:(CGRect)frame setAdImage:(setAdImageBlock)setAdImage showFinish:(showFinishBlock)showFinish
++ (void)showWithAdFrame:(CGRect)frame setAdImage:(setAdImageBlock)setAdImage showFinish:(showFinishBlock)showFinish
 {
-    
+    ZYLaunchAd *AdVC = [[ZYLaunchAd alloc] initWithFrame:frame showFinish:showFinish];
+    [[UIApplication sharedApplication].delegate window].rootViewController = AdVC;
+    if(setAdImage) setAdImage(AdVC);
 }
 
 /**
@@ -76,17 +78,54 @@ static NSInteger const noDataDefaultDuration = 3;
     //后台缓存本次不显示,缓存完成以后下次显示
     if (options&ZYWebImageCacheInBackground)
     {
-        if (self.noDataTimer) dispatch_source_cancel(self.noDataTimer);
+        if (_noDataTimer) dispatch_source_cancel(_noDataTimer);
         [[UIImageView alloc]zy_setImageWithUrl:[NSURL URLWithString:imageUrl] placeholderImage:nil options:options completed:nil];
         [self remove];
         return;
     }
     
-    self.duration = duration;
-    self.skipType = skipType;
-    self.clickBlock = [click copy];
+    _duration = duration;
+    _skipType = skipType;
+    _clickBlock = [click copy];
     [self setupAdImgViewAndSkipButton];
-    [self.adImgView zy_setImageWithUrl:[NSURL URLWithString:imageUrl] placeholderImage:nil options:options completed:completedBlock];
+    [_adImgView zy_setImageWithUrl:[NSURL URLWithString:imageUrl] placeholderImage:nil options:options completed:completedBlock];
+}
+
++(void)clearDiskCache
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *path = [ZYImageCache zy_cacheImagePath];
+        [fileManager removeItemAtPath:path error:nil];
+        [ZYImageCache zy_checkDirectory:[ZYImageCache zy_cacheImagePath]];
+        
+    });
+}
+
++(float)imagesCacheSize {
+    NSString *directoryPath = [ZYImageCache zy_cacheImagePath];
+    BOOL isDir = NO;
+    unsigned long long total = 0;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath isDirectory:&isDir]) {
+        if (isDir) {
+            NSError *error = nil;
+            NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directoryPath error:&error];
+            
+            if (error == nil) {
+                for (NSString *subpath in array) {
+                    NSString *path = [directoryPath stringByAppendingPathComponent:subpath];
+                    NSDictionary *dict = [[NSFileManager defaultManager] attributesOfItemAtPath:path
+                                                                                          error:&error];
+                    if (!error) {
+                        total += [dict[NSFileSize] unsignedIntegerValue];
+                    }
+                }
+            }
+        }
+    }
+    return total/(1024.0*1024.0);
 }
 
 // ==============================================================
@@ -104,9 +143,9 @@ static NSInteger const noDataDefaultDuration = 3;
 {
     if (self = [super init])
     {
-        self.adFrame = frame;
-        self.noDataDuration = noDataDefaultDuration;
-        self.showFinishBlock = [showFinish copy];
+        _adFrame = frame;
+        _noDataDuration = noDataDefaultDuration;
+        _showFinishBlock = [showFinish copy];
         [self.view addSubview:self.launchImgView];
         //开启无数据倒计时服务
         [self startNoDataDispath_timer];
@@ -122,9 +161,9 @@ static NSInteger const noDataDefaultDuration = 3;
  */
 - (void)viewWillAppear:(BOOL)animated
 {
-    if (self.skipButtonTimer && self.duration > 0 && self.isClick) {
+    if (_skipButtonTimer && _duration > 0 && self.isClick) {
         //dispatch_resume函数恢复指定的Dispatch Queue
-        dispatch_resume(self.skipButtonTimer);
+        dispatch_resume(_skipButtonTimer);
     }
     self.isClick = NO;
 }
@@ -137,7 +176,7 @@ static NSInteger const noDataDefaultDuration = 3;
  */
 - (void)viewDidDisappear:(BOOL)animated
 {
-    if (self.skipButtonTimer && self.duration > 0 && self.isClick) {
+    if (_skipButtonTimer && _duration > 0 && _isClick) {
         //dispatch_suspend函数挂起指定的Dispatch Queue
         dispatch_suspend(self.skipButtonTimer);
     }
@@ -160,21 +199,21 @@ static NSInteger const noDataDefaultDuration = 3;
 {
     NSTimeInterval period = 1.0;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    self.noDataTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    dispatch_source_set_timer(self.noDataTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
+    _noDataTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    dispatch_source_set_timer(_noDataTimer, dispatch_walltime(NULL, 0), period * NSEC_PER_SEC, 0);
     
-    __block NSInteger duration = self.noDataDuration;
-    dispatch_source_set_event_handler(self.noDataTimer, ^{
+    __block NSInteger duration = _noDataDuration;
+    dispatch_source_set_event_handler(_noDataTimer, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             if (duration == 0) {
-                dispatch_source_cancel(self.noDataTimer);
+                dispatch_source_cancel(_noDataTimer);
                 [self remove];
             }
             duration--;
         });
     });
     //dispatch_resume函数恢复指定的Dispatch Queue
-    dispatch_resume(self.noDataTimer);
+    dispatch_resume(_noDataTimer);
 }
 
 /**
@@ -227,7 +266,7 @@ static NSInteger const noDataDefaultDuration = 3;
  */
 - (void)animateStart
 {
-    CGFloat duration = self.duration;
+    CGFloat duration = _duration;
     duration = duration/4.0;
     if (duration > 1.0) duration = 1.0;
     [UIView animateWithDuration:duration animations:^{
@@ -331,6 +370,20 @@ static NSInteger const noDataDefaultDuration = 3;
     return _skipButton;
 }
 
+-(void)setAdFrame:(CGRect)adFrame
+{
+    _adFrame = adFrame;
+    _adImgView.frame = adFrame;
+}
+
+-(void)setNoDataDuration:(NSInteger)noDataDuration
+{
+    if(noDataDuration<1) noDataDuration=1;
+    _noDataDuration = noDataDuration;
+    dispatch_source_cancel(_noDataTimer);
+    [self startNoDataDispath_timer];
+}
+
 // ==============================================================
 #pragma mark - 事件函数
 // ==============================================================
@@ -372,7 +425,7 @@ static NSInteger const noDataDefaultDuration = 3;
         //判断动画是否结束
         BOOL oldState = [UIView areAnimationsEnabled];
         [UIView setAnimationsEnabled:NO];
-        self.isShowFinish = YES;
+        _isShowFinish = YES;
         if (self.showFinishBlock) self.showFinishBlock();
         [UIView setAnimationsEnabled:oldState];
     } completion:NULL];

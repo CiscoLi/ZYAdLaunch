@@ -37,7 +37,7 @@ typedef void(^showFinishBlock)();
  @param setAdImage      设置AdImage回调
  @param showFinish      广告显示完成回调(在这里进行操作)
  */
-- (void)showWithAdFrame:(CGRect)frame setAdImage:(setAdImageBlock)setAdImage showFinish:(showFinishBlock)showFinish;
++ (void)showWithAdFrame:(CGRect)frame setAdImage:(setAdImageBlock)setAdImage showFinish:(showFinishBlock)showFinish;
 
 /**
  数据源方法
@@ -50,5 +50,15 @@ typedef void(^showFinishBlock)();
  @param click           点击了广告回调
  */
 - (void)setImageUrl:(NSString *)imageUrl duration:(NSInteger)duration skipType:(SkipType)skipType options:(ZYWebImageOptions)options completed:(ZYWebImageCompletionBlock)completedBlock click:(clickBlock)click;
+
+/**
+ *  清除图片本地缓存
+ */
++(void)clearDiskCache;
+
+/**
+ *  获取缓存图片占用总大小(M)
+ */
++(float)imagesCacheSize;
 
 @end
