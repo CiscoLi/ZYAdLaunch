@@ -47,7 +47,7 @@
     /**
      *  1.显示启动页广告
      */
-    [ZYLaunchAd showWithAdFrame:CGRectMake(0, 0,self.window.bounds.size.width, self.window.bounds.size.height-150) setAdImage:^(ZYLaunchAd *launchAd) {
+    [ZYLaunchAd showWithAdFrame:CGRectMake(0, 0,self.window.bounds.size.width, self.window.bounds.size.height * 0.9) setAdImage:^(ZYLaunchAd *launchAd) {
         
         //未检测到广告数据,启动页停留时间,不设置默认为3,(设置4即表示:启动页显示了4s,还未检测到广告数据,就自动进入window根控制器)
         //launchAd.noDataDuration = 4;
