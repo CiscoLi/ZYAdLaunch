@@ -12,8 +12,6 @@
 
 @interface ViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *lab;
-
 @end
 
 @implementation ViewController
@@ -26,7 +24,6 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"ZYLaunchAdExample";
-    self.lab.text = @"使用说明及注意事项";
     
     // Do any additional setup after loading the view from its nib.
 }
